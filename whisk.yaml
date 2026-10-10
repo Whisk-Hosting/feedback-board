@@ -1,0 +1,34 @@
+whisk: 1
+name: feedback
+
+# Customers sign in to post and vote (their own sign-in pool); staff are the business's team.
+customer_identity: app
+
+routes:
+  # The board, ideas, the roadmap and the changelog are open to anyone. Posting, voting,
+  # commenting and the staff pages need a signed-in person. The API checks its own keys.
+  public: ["/", "/health", "/assets/**", "/fonts/**", "/b/*", "/p/**", "/roadmap", "/changelog", "/changelog/*", "/api/**"]
+
+health:
+  path: /health
+  timeout: 60
+
+database: app
+migrate: "node dist/migrate.js"
+
+# The font ships with the app and is served by the edge without waking it.
+static:
+  - { dir: public/fonts, path: /fonts }
+
+# Status changes, team replies and shipped ideas, from the business's own domain once verified.
+email: true
+
+functions:
+  - name: send-email
+    event: email.send
+    graph: workflows/send-email.graph.yaml
+
+env:
+  LOG_LEVEL: info
+  # "1" only on the live demo (demo/whisk.yaml): see src/demo.ts.
+  DEMO: "0"

@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.whisk/
+.env
+.env.*
+!.env.example

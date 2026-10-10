@@ -1,0 +1,38 @@
+# The live demo only (examples/demo-mode.md): `npm run deploy:demo` puts this in place of
+# whisk.yaml. Every route is public, every change is a challenged POST, and DEMO=1 turns on the
+# "Look around" guest, unsent email and the nightly reset.
+whisk: 1
+name: feedback
+
+customer_identity: app
+
+routes:
+  # /api/** is public and never challenged, since scripts cannot solve a challenge; the API still
+  # needs a key, which the guest makes under Manage > Settings.
+  public: ["/", "/**", "/api/**"]
+  challenge: ["/posts", "/posts/**", "/comments/**", "/entries", "/entries/**", "/manage/**", "/me", "/demo/**"]
+
+health:
+  path: /health
+  timeout: 60
+
+database: app
+migrate: "node dist/migrate.js"
+
+static:
+  - { dir: public/fonts, path: /fonts }
+
+email: true
+
+functions:
+  - name: send-email
+    event: email.send
+    graph: workflows/send-email.graph.yaml
+  - name: demo-reset
+    cron: "0 3 * * *"
+    tz: America/New_York
+    graph: workflows/demo-reset.graph.yaml
+
+env:
+  LOG_LEVEL: info
+  DEMO: "1"

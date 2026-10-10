@@ -1,0 +1,35 @@
+{
+  "name": "whisk-feedback",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --noEmit && node build.mjs",
+    "start": "node --enable-source-maps dist/index.js",
+    "dev": "tsx src/index.ts",
+    "migrate": "node dist/migrate.js",
+    "migrate:dev": "tsx src/migrate.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "tsx --test test/*.test.ts",
+    "deploy:demo": "node demo/deploy.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.1.1",
+    "hono": "^4.13.7",
+    "inngest": "^4.21.1",
+    "marked": "^16.4.0",
+    "pino": "^10.3.1",
+    "postgres": "^3.4.9"
+  },
+  "devDependencies": {
+    "@fontsource-variable/figtree": "^5.3.0",
+    "@types/node": "^26.4.1",
+    "esbuild": "^0.25.12",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
+  }
+}
