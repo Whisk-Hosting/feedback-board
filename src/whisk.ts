@@ -37,8 +37,8 @@ export const identity = (h: (name: string) => string | undefined): Identity => (
 // The app's API on Whisk, from WHISK_QUEUE_URL (https://api.whisk.run/v1/orgs/<org>/apps/<app>/events).
 const appApi = (path: string) => env("WHISK_QUEUE_URL").replace(/\/events$/, "") + path;
 
-// whiskApi calls the Whisk API as this app, with a deadline. The service token rotates daily, so
-// it is read from the environment on every call. Outside Whisk (a plain local run) email is
+// whiskApi calls the Whisk API as this app, with a deadline and the service token from the
+// environment. Outside Whisk (a plain local run) email is
 // logged instead of sent.
 export const whiskApi = async <T>(path: string, body?: unknown): Promise<T> => {
   if (!queueAvailable()) {
